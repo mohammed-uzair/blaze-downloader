@@ -1,0 +1,2 @@
+include ':app', ':blaze-downloader'
+rootProject.name='Blaze Image Loader'
