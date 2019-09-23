@@ -12,11 +12,12 @@ class ImageFeedRepository : IImageFeedRepository {
         //Return all the image feeds by creating an in app data model
         return listOf(
             ImageFeedModel("https://lh3.googleusercontent.com/ilpx0OlrIlJ0No0fRbIZEmtYJTt37WY4ouzRXFe3gFiltasjDgukbZEZW3954WIL8buXVRtlzQ=w640-h400-e365", ""),
+            ImageFeedModel("https://lh3.googleusercontent.com/ilpx0OlrIlJ0No0fRbIZEmtYJTt37WY4ouzRXFe3gFiltasjDgukbZEZW3954WIL8buXVRtlzQ=w640-h400-e365", ""),
             ImageFeedModel("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaKa-SUHCdG5RTO8CTj3yAzCDW5UTb5mInTppizcF_b925k00N", ""),
             ImageFeedModel("https://www.petmd.com/sites/default/files/Senior-Cat-Care-2070625.jpg", ""),
             ImageFeedModel("https://images2.minutemediacdn.com/image/upload/c_crop,h_1193,w_2121,x_0,y_175/f_auto,q_auto,w_1100/v1554921998/shape/mentalfloss/549585-istock-909106260.jpg", ""),
             ImageFeedModel("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1fmdK6W7rSjqEk87xnxY2HodgwIV90j2Qtq8SVx059PqQw5nOFg", ""),
-            ImageFeedModel("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJBnYhRJdmNKaOJbxiv1ENbv_HHfPNVCQytDpuXg3hfa5sf22W", ""),
+            ImageFeedModel("https://d17fnq9dkz9hgj.cloudfront.net/uploads/2012/11/101438745-cat-conjunctivitis-causes.jpg", ""),
             ImageFeedModel("https://metro.co.uk/wp-content/uploads/2019/05/Shadow-Darth-Maul-South-Ayrshire-b227.jpg?quality=90&strip=all", ""),
             ImageFeedModel("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhW2--5Tf4McPHAV2sbBgV17QzMMPceHQgrA6sv_Yy8z6IdJns", ""),
             ImageFeedModel("https://d2eehagpk5cl65.cloudfront.net/img/q60/uploads/assets/mc/2018_12/reason-kitten.jpg", ""),

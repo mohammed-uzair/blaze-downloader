@@ -25,8 +25,6 @@ open class ImageFeedAdapter(
         viewHolder.image.setOnClickListener {
             val adapterPosition = viewHolder.adapterPosition
 
-            //Set max used cache size
-            BlazeDownloader.instance.setLruCache(12)
             BlazeDownloader.instance.cancelDownloadingImage(imageFeeds[adapterPosition].imageUrl)
 
             Toast.makeText(
@@ -44,11 +42,18 @@ open class ImageFeedAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val imageUrl = imageFeeds[holder.adapterPosition].imageUrl
+        val imageUrl = imageFeeds[position].imageUrl
 
+        println("DEBUG POSITION : $position")
+
+        //Set max used cache size
+//        BlazeDownloader.instance.lruCacheSize = 30
         BlazeDownloader.instance.downloadImage(imageUrl, holder.image)
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val image: ImageView = view.findViewById(R.id.image_feed_image)
