@@ -1,19 +1,33 @@
 package com.example.uzair.blaze_downloader.cache
 
-import android.util.Log
 import com.example.uzair.blaze_downloader.BlazeDownloader
 import com.example.uzair.blaze_downloader.ImageModel
 import java.util.*
 
+/**
+ * This is the main algorithm for LRU(Least Recently Used) eviction logic.
+ * I have used hash map and doubly linked list for this.
+ *
+ * Every item that is accessed is moved to the top of the list(Recently used item).
+ * Thus always the least recently used item remains at the last of the node.
+ * Thus its easy for removal of the least used item from the last node.
+ */
 class LruCache(private val blazeDownloader: BlazeDownloader) {
+    //A hash map containing the url as key and entry as the reference to doubly linked list
     private val hashMap: HashMap<String, Entry> = HashMap()
+
+    //Assign the start node as null
     private var start: Entry? = null
+
+    //Assign the end node as null
     private var end: Entry? = null
 
+    /**
+     * Get the model from the cache, returns null if not in the cache
+     */
     fun getEntry(key: String): ImageModel? {
-        if (hashMap.containsKey(key))
-        //Key Already Exist, just update the value and move it to top
-        {
+        if (hashMap.containsKey(key)) {
+            //Key already exist, just update the value and move it to top
             val entry = hashMap[key]
             if (entry != null) {
                 removeNode(entry)
@@ -24,29 +38,32 @@ class LruCache(private val blazeDownloader: BlazeDownloader) {
         return null
     }
 
+    /**
+     * Add a new item to the LRU cache
+     */
     fun putEntry(key: String, value: ImageModel) {
-        if (hashMap.containsKey(key))
-        //Key Already Exist, just update the value and move it to top
-        {
+        if (hashMap.containsKey(key)) {
+            //Key already exist, just update the value and move it to top
             val entry = hashMap[key]
             if (entry != null) {
                 entry.value = value
                 removeNode(entry)
                 addAtTop(entry)
             }
-        } else {
+        }
+
+        //Add a new entry into the cache
+        else {
             val newNode = Entry()
             newNode.left = null
             newNode.right = null
             newNode.value = value
             newNode.key = key
-            if (hashMap.size > blazeDownloader.lruCacheSize)
-            // We have reached maximum size so need to make room for new element.
-            {
+            if (hashMap.size > blazeDownloader.lruCacheSize) {
+                //We have reached maximum size so need to make room for new element.
                 hashMap.remove(end!!.key)
                 removeNode(end!!)
                 addAtTop(newNode)
-                Log.i(TAG, "DEBUG : Removed from cache")
             } else {
                 addAtTop(newNode)
             }
@@ -55,6 +72,9 @@ class LruCache(private val blazeDownloader: BlazeDownloader) {
         }
     }
 
+    /**
+     * Move/add an element to the top of the map and at start of the list
+     */
     private fun addAtTop(node: Entry) {
         node.right = start
         node.left = null
@@ -65,6 +85,9 @@ class LruCache(private val blazeDownloader: BlazeDownloader) {
             end = start
     }
 
+    /**
+     * Remove an item from the cache
+     */
     private fun removeNode(node: Entry) {
 
         if (node.left != null) {
@@ -78,9 +101,5 @@ class LruCache(private val blazeDownloader: BlazeDownloader) {
         } else {
             end = node.left
         }
-    }
-
-    companion object {
-        private val TAG = LruCache::class.java.simpleName
     }
 }

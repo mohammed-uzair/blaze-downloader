@@ -1,7 +1,7 @@
 package com.example.uzair.blazeimageloader.repository
 
-import com.example.uzair.blazeimageloader.model.ImageFeedModel
+import ImageFeed
 
 interface IImageFeedRepository {
-    fun getAllImageFeeds(): List<ImageFeedModel>
+    fun getAllImageFeeds(): List<ImageFeed>
 }

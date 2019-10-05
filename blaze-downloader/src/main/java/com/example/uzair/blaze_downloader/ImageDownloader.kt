@@ -7,7 +7,7 @@ import java.io.IOException
 import java.net.MalformedURLException
 import java.net.URL
 
-class AsyncImageDownloader(private val url: String) {
+class ImageDownloader(private val url: String) {
     private val TAG = javaClass::getSimpleName.name
 
     fun getImageFromCdn(): Bitmap? {
