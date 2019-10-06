@@ -1,8 +1,8 @@
 package com.example.uzair.blazeimageloader.repository
 
-import WallPost
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.example.uzair.blazeimageloader.models.WallPost
 
 interface IWallPostsRepository {
-    fun getAllWallPosts(): LiveData<WallPost>
+    fun getAllWallPosts(mutableLiveData: MutableLiveData<ArrayList<WallPost>>)
 }

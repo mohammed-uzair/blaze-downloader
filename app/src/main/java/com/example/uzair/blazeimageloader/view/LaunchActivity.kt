@@ -67,7 +67,7 @@ class LaunchActivity : Activity() {
 
         //Open the main home screen after some pre defined seconds
         Handler().postDelayed({
-            startActivity(Intent(this@LaunchActivity, MainActivity::class.java))
+            startActivity(Intent(this@LaunchActivity, WallPostsActivity::class.java))
 
             this@LaunchActivity.finish()
         }, SPLASH_SCREEN_DELAY_MILLISECONDS.toLong())

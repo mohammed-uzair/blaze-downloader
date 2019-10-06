@@ -1,3 +1,5 @@
+package com.example.uzair.blazeimageloader.models
+
 data class Categories(
     val id: Int,
     val title: String,

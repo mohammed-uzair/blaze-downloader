@@ -15,16 +15,16 @@ import java.net.MalformedURLException
 import java.net.URL
 
 class BlazeDownloader {
-    private val TAG = javaClass::getSimpleName.name
+    companion object {
+        private val TAG = this::class.java.simpleName
+        val instance = BlazeDownloader()
+    }
+
     var lruCacheSize = 8
 
     //Our in memory cache mechanism
     private val jobMap = HashMap<ImageView, Job>()
     private val lruCache = LruCache(this)
-
-    companion object {
-        val instance = BlazeDownloader()
-    }
 
     fun downloadImage(url: String, imageView: ImageView) {
         println("My Debug : $imageView")

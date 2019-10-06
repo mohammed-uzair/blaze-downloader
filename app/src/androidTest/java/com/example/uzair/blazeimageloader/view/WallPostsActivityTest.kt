@@ -3,6 +3,7 @@ package com.example.uzair.blazeimageloader.view
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.rule.ActivityTestRule
 import com.example.uzair.blazeimageloader.R
+import com.example.uzair.blazeimageloader.adapter.WallPostsAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -13,19 +14,19 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class MainActivityTest {
+class WallPostsActivityTest {
     @Rule
     @JvmField
-    val activityTestRule = ActivityTestRule(MainActivity::class.java)
+    val activityTestRule = ActivityTestRule(WallPostsActivity::class.java)
 
-    private var mainActivity: MainActivity? = null
+    private var wallPostsActivity: WallPostsActivity? = null
 
     /**
      * Setup all the testing resources used for this class to perform testing
      */
     @Before
     fun setUp() {
-        mainActivity = activityTestRule.activity
+        wallPostsActivity = activityTestRule.activity
     }
 
     /**
@@ -33,7 +34,7 @@ class MainActivityTest {
      */
     @Test
     fun testIfActivityIsLaunched() {
-        val rootRecyclerView = mainActivity?.findViewById<RecyclerView>(R.id.main_recycler_view)
+        val rootRecyclerView = wallPostsActivity?.findViewById<RecyclerView>(R.id.main_recycler_view)
 
         //Test if this view is created
         assertNotNull(rootRecyclerView)
@@ -53,9 +54,9 @@ class MainActivityTest {
 
             //Check if the recycler view has any data
             val rootRecyclerView: RecyclerView? =
-                mainActivity?.findViewById(R.id.main_recycler_view)
+                wallPostsActivity?.findViewById(R.id.main_recycler_view)
 
-            val adapter = rootRecyclerView?.adapter as ImageFeedAdapter
+            val adapter = rootRecyclerView?.adapter as WallPostsAdapter
 
             //Test if the recycler view list is greater than 0
             assert(adapter.itemCount > 0)
@@ -67,6 +68,6 @@ class MainActivityTest {
      */
     @After
     fun tearDown() {
-        mainActivity = null
+        wallPostsActivity = null
     }
 }

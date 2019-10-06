@@ -4,5 +4,5 @@
     android:id="@+id/main_recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.MainActivity"
-    tools:listitem="@layout/item_user" />
+    tools:context=".view.WallPostsActivity"
+    tools:listitem="@layout/item_feed" />

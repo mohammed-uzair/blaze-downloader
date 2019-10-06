@@ -8,7 +8,9 @@ import java.net.MalformedURLException
 import java.net.URL
 
 class ImageDownloader(private val url: String) {
-    private val TAG = javaClass::getSimpleName.name
+    companion object {
+        private val TAG = this::class.java.simpleName
+    }
 
     fun getImageFromCdn(): Bitmap? {
         var bitmap: Bitmap? = null
