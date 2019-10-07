@@ -1,45 +1,55 @@
 package com.example.uzair.blazeimageloader.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
-import com.example.uzair.blazeimageloader.datasource.factory.WallPostFactory
-import com.example.uzair.blazeimageloader.models.WallPost
-import com.example.uzair.blazeimageloader.repository.IWallPostsRepository
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.paging.Config
+import androidx.paging.toLiveData
+import com.example.uzair.blazeimageloader.database.WallPostDb
 import com.example.uzair.blazeimageloader.repository.WallPostsRepository
-import com.example.uzair.blazeimageloader.util.NetworkState
 
 /**
- * This is the viewmodel for the home fragment and does all the processing for the home UI data here.
+ * A simple ViewModel that provides a paged list of all posts.
  */
-class WallPostsViewModel : ViewModel() {
-    private var networkState: LiveData<NetworkState>
-    private var wallPostsLiveData: LiveData<PagedList<WallPost>>
+class WallPostsViewModel(val app: Application) : AndroidViewModel(app) {
+    private val dao = WallPostDb.get(app).wallPostDao()
 
-    init {
-        val wallPostFactory = WallPostFactory()
+    /**
+     * We use -ktx Kotlin extension functions here, otherwise you would use LivePagedListBuilder(),
+     * and PagedList.Config.Builder()
+     */
+    val allPosts = dao.allWallPosts().toLiveData(
+        Config(
+            /**
+             * A good page size is a value that fills at least a screen worth of content on a large
+             * device so the User is unlikely to see a null item.
+             * You can play with this constant to observe the paging behavior.
+             * <p>
+             * It's possible to vary this with list device size, but often unnecessary, unless a
+             * user scrolling on a large device is expected to scroll through items more quickly
+             * than a small device, such as when the large device uses a grid layout of items.
+             */
+            pageSize = 10,
 
-        networkState = Transformations.switchMap(
-            wallPostFactory.getMutableLiveData()
-        ) { dataSource -> dataSource.networkState }
+            /**
+             * If placeholders are enabled, PagedList will report the full size but some items might
+             * be null in onBind method (PagedListAdapter triggers a rebind when data is loaded).
+             * <p>
+             * If placeholders are disabled, onBind will never receive null but as more pages are
+             * loaded, the scrollbars will jitter as new pages are loaded. You should probably
+             * disable scrollbars if you disable placeholders.
+             */
+            enablePlaceholders = true,
 
-        val pagedListConfig = PagedList.Config.Builder()
-            .setEnablePlaceholders(false)
-            .setInitialLoadSizeHint(10)
-            .setPageSize(20).build()
+            /**
+             * Maximum number of items a PagedList should hold in memory at once.
+             * <p>
+             * This number triggers the PagedList to start dropping distant pages as more are loaded.
+             */
+            maxSize = 100
+        )
+    )
 
-        wallPostsLiveData = LivePagedListBuilder(wallPostFactory, pagedListConfig)
-            .build()
-    }
-
-    fun getNetworkState(): LiveData<NetworkState> {
-        return networkState
-    }
-
-    fun getAllWallPosts(): LiveData<PagedList<WallPost>> {
-        return wallPostsLiveData
+    fun fetchAllData() {
+        WallPostsRepository(app).getAllWallPosts()
     }
 }

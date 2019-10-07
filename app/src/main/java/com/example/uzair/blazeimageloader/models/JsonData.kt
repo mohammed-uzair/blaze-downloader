@@ -1,10 +1,11 @@
 package com.example.uzair.blazeimageloader.models
 
+import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
 import org.json.JSONArray
 
-class JsonData(val data: String) {
+class JsonData(private val data: String, private val context: Context) {
     companion object {
         private val TAG = this::class.java.simpleName
     }

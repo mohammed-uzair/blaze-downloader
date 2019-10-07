@@ -1,123 +1,56 @@
 package com.example.uzair.blazeimageloader.adapter
 
-import android.content.Context
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
-import androidx.annotation.NonNull
-import androidx.core.content.res.ResourcesCompat
 import androidx.paging.PagedListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.example.uzair.blaze_downloader.BlazeDownloader
-import com.example.uzair.blazeimageloader.R
+import androidx.recyclerview.widget.DiffUtil
 import com.example.uzair.blazeimageloader.models.WallPost
-import com.example.uzair.blazeimageloader.util.NetworkState
 
-class WallPostsAdapter(private val context: Context) :
-    PagedListAdapter<WallPost, RecyclerView.ViewHolder>(WallPost.DIFF_CALLBACK) {
-    companion object {
-        private const val TYPE_PROGRESS = 0
-        private const val TYPE_ITEM = 1
+/**
+ * A simple PagedListAdapter that binds posts items into CardViews.
+ * <p>
+ * PagedListAdapter is a RecyclerView.Adapter base class which can present the content of PagedLists
+ * in a RecyclerView. It requests new pages as the user scrolls, and handles new PagedLists by
+ * computing list differences on a background thread, and dispatching minimal, efficient updates to
+ * the RecyclerView to ensure minimal UI thread work.
+ * <p>
+ * If you want to use your own Adapter base class, try using a PagedListAdapterHelper inside your
+ * adapter instead.
+ *
+ * @see android.arch.paging.PagedListAdapter
+ * @see android.arch.paging.AsyncPagedListDiffer
+ */
+class WallPostsAdapter : PagedListAdapter<WallPost, WallPostViewHolder>(
+    diffCallback
+) {
+    override fun onBindViewHolder(holder: WallPostViewHolder, position: Int) {
+        holder.bindTo(getItem(position))
     }
 
-    private var networkState: NetworkState? = null
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WallPostViewHolder =
+        WallPostViewHolder(parent)
 
-    @NonNull
-    override fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (viewType == TYPE_PROGRESS) {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_network_state, parent, false)
-
-            NetworkStateItemViewHolder(view)
-
-        } else {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_feed, parent, false)
-
-            WallPostItemViewHolder(view)
-        }
-    }
-
-    override fun onBindViewHolder(@NonNull holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is WallPostItemViewHolder) {
-            getItem(position)?.let {
-                holder.text.text = it.user?.name
-
-                //Place a dummy place holder until the actual images gets download from the data source
-                holder.image.setImageDrawable(
-                    ResourcesCompat.getDrawable
-                        (context.resources, R.drawable.ic_user, null)
-                )
-
-                //Set max used cache size
-                BlazeDownloader.instance.lruCacheSize = 30
-                val imageUrl = it.user?.profile_image?.large
-
-                if (imageUrl != null)
-                    BlazeDownloader.instance.downloadImage(imageUrl, holder.image)
-            }
-        } else {
-            (holder as NetworkStateItemViewHolder).bindView(networkState)
-        }
-    }
-
-
-    private fun hasExtraRow(): Boolean {
-        return networkState != null && networkState !== NetworkState.LOADED
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (hasExtraRow() && position == itemCount - 1) {
-            TYPE_PROGRESS
-        } else {
-            TYPE_ITEM
-        }
+        return position
     }
 
-    fun setNetworkState(newNetworkState: NetworkState) {
-        val previousState = this.networkState
-        val previousExtraRow = hasExtraRow()
-        this.networkState = newNetworkState
-        val newExtraRow = hasExtraRow()
-        if (previousExtraRow != newExtraRow) {
-            if (previousExtraRow) {
-                notifyItemRemoved(itemCount)
-            } else {
-                notifyItemInserted(itemCount)
-            }
-        } else if (newExtraRow && previousState !== newNetworkState) {
-            notifyItemChanged(itemCount - 1)
-        }
-    }
+    companion object {
+        /**
+         * This diff callback informs the PagedListAdapter how to compute list differences when new
+         * PagedLists arrive.
+         */
+        private val diffCallback = object : DiffUtil.ItemCallback<WallPost>() {
+            override fun areItemsTheSame(oldItem: WallPost, newItem: WallPost): Boolean =
+                oldItem.id == newItem.id
 
-
-    inner class WallPostItemViewHolder(view: View) :
-        RecyclerView.ViewHolder(view) {
-        val image: ImageView = view.findViewById(R.id.user_profile_image)
-        val text: TextView = view.findViewById(R.id.user_name)
-    }
-
-    inner class NetworkStateItemViewHolder(view: View) :
-        RecyclerView.ViewHolder(view) {
-        private val progressBar: ProgressBar = view.findViewById(R.id.progress_bar)
-        private val errorMessage: TextView = view.findViewById(R.id.error_msg)
-
-        fun bindView(networkState: NetworkState?) {
-            if (networkState != null && networkState.status === NetworkState.Status.RUNNING) {
-                progressBar.visibility = View.VISIBLE
-            } else {
-                progressBar.visibility = View.GONE
-            }
-
-            if (networkState != null && networkState.status === NetworkState.Status.FAILED) {
-                errorMessage.visibility = View.VISIBLE
-                errorMessage.text = networkState.msg
-            } else {
-                errorMessage.visibility = View.GONE
-            }
+            /**
+             * Note that in kotlin, == checking on data classes compares all contents
+             */
+            override fun areContentsTheSame(oldItem: WallPost, newItem: WallPost): Boolean =
+                oldItem == newItem
         }
     }
 }

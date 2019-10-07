@@ -1,9 +1,9 @@
 package com.example.uzair.blazeimageloader.repository
 
-import androidx.lifecycle.MutableLiveData
+import android.app.Application
 import com.example.uzair.blaze_downloader.BlazeDownloader
 import com.example.uzair.blazeimageloader.models.JsonData
-import com.example.uzair.blazeimageloader.models.WallPost
+import com.example.uzair.blazeimageloader.database.WallPostDb
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,8 +22,8 @@ import kotlinx.coroutines.launch
  * but at later point we can also add a data base or a local cache without disturbing any other
  * modules.
  */
-class WallPostsRepository : IWallPostsRepository {
-    override fun getAllWallPosts(mutableLiveData: MutableLiveData<ArrayList<WallPost>>) {
+class WallPostsRepository(val context: Application) : IWallPostsRepository {
+    override fun getAllWallPosts() {
         /*Write a logic here to find where to get the data from,
         for now in this case its only webservice.*/
 
@@ -36,7 +36,7 @@ class WallPostsRepository : IWallPostsRepository {
 
         /*Finally if nothing works out from above, fetch the data from the server, using the
         blaze downloader*/
-        getWallPostsFromWebService(mutableLiveData)
+        getWallPostsFromWebService()
     }
 
     /**
@@ -44,7 +44,7 @@ class WallPostsRepository : IWallPostsRepository {
      *
      * @param mutableLiveData A live list reference to update the UI
      */
-    private fun getWallPostsFromWebService(mutableLiveData: MutableLiveData<ArrayList<WallPost>>) {
+    private fun getWallPostsFromWebService() {
         val imageFeedUrl = "https://pastebin.com/raw/wgkJgazE"
 
         //Start a new coroutine
@@ -55,10 +55,15 @@ class WallPostsRepository : IWallPostsRepository {
 
             //Parse the received Json response
             data?.let {
-                val jsonData = JsonData(data)
+                val jsonData = JsonData(data, context)
+
+                val dao = WallPostDb.get(context).wallPostDao()
+
+                //Add as the cached version of this received data into the InMemory db
+                dao.insert(jsonData.getParsedData())
 
                 //Post the result to the observer
-                mutableLiveData.postValue(jsonData.getParsedData())
+//                mutableLiveData.postValue(jsonData.getParsedData())
             }
         }
     }

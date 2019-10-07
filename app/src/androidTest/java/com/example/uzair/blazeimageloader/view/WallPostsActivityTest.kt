@@ -34,7 +34,8 @@ class WallPostsActivityTest {
      */
     @Test
     fun testIfActivityIsLaunched() {
-        val rootRecyclerView = wallPostsActivity?.findViewById<RecyclerView>(R.id.main_recycler_view)
+        val rootRecyclerView =
+            wallPostsActivity?.findViewById<RecyclerView>(R.id.main_recycler_view)
 
         //Test if this view is created
         assertNotNull(rootRecyclerView)
