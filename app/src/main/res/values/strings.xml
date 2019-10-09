@@ -3,4 +3,5 @@
     <string name="image_feed">image_feed</string>
     <string name="launch_text_main">Image Loading</string>
     <string name="launch_text_sub">Download Images wisely</string>
+    <string name="image_loading_cancelled">Cancelled image downloading</string>
 </resources>

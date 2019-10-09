@@ -1,7 +1,6 @@
 package com.example.uzair.blazeimageloader.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -10,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.uzair.blaze_downloader.BlazeDownloader
 import com.example.uzair.blazeimageloader.R
 import com.example.uzair.blazeimageloader.models.WallPost
+import com.google.android.material.snackbar.Snackbar
 
 /**
  * A simple ViewHolder that can bind a post item. It also accepts null items since the data may
@@ -27,6 +27,8 @@ class WallPostViewHolder(private val parent: ViewGroup) : RecyclerView.ViewHolde
     //downloading of the image
     private val listener = image.setOnClickListener {
         BlazeDownloader.instance.cancelDownloadingImage(image)
+
+        Snackbar.make(image, R.string.image_loading_cancelled, Snackbar.LENGTH_SHORT).show()
     }
 
     /**

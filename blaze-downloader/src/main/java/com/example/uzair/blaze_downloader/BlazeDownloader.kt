@@ -40,7 +40,6 @@ class BlazeDownloader {
             //Add the image model to the local cache
             lruCache.putEntry(url, newImageModel)
             val job = CoroutineScope(IO).launch {
-                delay(10_000)
                 bitmap = ImageDownloader(url).getImageFromCdn()
 
                 if (bitmap != null) {
