@@ -28,15 +28,14 @@ class BlazeDownloader {
 
     fun downloadImage(url: String, imageView: ImageView) {
         println("My Debug : $imageView")
-//        imageView.setImageBitmap(null)
 
         //Check if the image is already in the cache
         val imageModel = lruCache.getEntry(url)
 
-        if (imageModel?.bitmap == null) {
+        if (imageModel?.data == null) {
             var bitmap: Bitmap? = null
 
-            val newImageModel = ImageModel(url, bitmap)
+            val newImageModel = DataModel(url, bitmap)
 
             //Add the image model to the local cache
             lruCache.putEntry(url, newImageModel)
@@ -45,7 +44,7 @@ class BlazeDownloader {
                 bitmap = ImageDownloader(url).getImageFromCdn()
 
                 if (bitmap != null) {
-                    newImageModel.bitmap = bitmap
+                    newImageModel.data = bitmap
 
                     //Set image in the cache
                     lruCache.putEntry(url, newImageModel)
@@ -64,10 +63,14 @@ class BlazeDownloader {
             jobMap[imageView] = job
         } else {
             println("$TAG DEBUG : CACHE : Adding to -> $imageView the image from $url")
-            imageView.setImageBitmap(imageModel.bitmap)
+            imageView.setImageBitmap(imageModel.data as Bitmap)
         }
     }
 
+    /**
+     * Cancel the downloading of image,
+     * this will stop the job of image from being downloaded
+     */
     fun cancelDownloadingImage(imageView: ImageView) {
         jobMap[imageView]?.cancel("The job is cancelled")
 
@@ -75,21 +78,15 @@ class BlazeDownloader {
         jobMap.remove(imageView)
     }
 
-//    fun fetchJsonData(url: String): String? {
-//        CoroutineScope(IO).launch {
-//            val one = withContext(IO) { getJsonData(url) }
-////        one.await()
-//            return@runBlocking one
-//        }
-//    }
-
+    /**
+     * Gets the Json data from the url specified
+     */
     public suspend fun getJsonData(url: String): String? {
         var connection: HttpURLConnection? = null
         var reader: BufferedReader? = null
 
         try {
-            val url = URL(url)
-            connection = url.openConnection() as HttpURLConnection
+            connection = URL(url).openConnection() as HttpURLConnection
             connection.connect()
 
 
@@ -102,7 +99,7 @@ class BlazeDownloader {
 
             while (line != null) {
                 buffer.append(line + "\n")
-//                Log.d("Response: ", "> $line")   //here you will get whole response...... :-)
+                Log.d("Response: ", "> $line")   //here you will get whole response...... :-)
 
                 line = reader.readLine()
             }
@@ -121,7 +118,6 @@ class BlazeDownloader {
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-
         }
 
         return null

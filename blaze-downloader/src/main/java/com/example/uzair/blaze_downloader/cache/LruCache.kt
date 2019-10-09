@@ -1,7 +1,7 @@
 package com.example.uzair.blaze_downloader.cache
 
 import com.example.uzair.blaze_downloader.BlazeDownloader
-import com.example.uzair.blaze_downloader.ImageModel
+import com.example.uzair.blaze_downloader.DataModel
 import java.util.*
 
 /**
@@ -25,7 +25,7 @@ class LruCache(private val blazeDownloader: BlazeDownloader) {
     /**
      * Get the model from the cache, returns null if not in the cache
      */
-    fun getEntry(key: String): ImageModel? {
+    fun getEntry(key: String): DataModel? {
         if (hashMap.containsKey(key)) {
             //Key already exist, just update the value and move it to top
             val entry = hashMap[key]
@@ -41,7 +41,7 @@ class LruCache(private val blazeDownloader: BlazeDownloader) {
     /**
      * Add a new item to the LRU cache
      */
-    fun putEntry(key: String, value: ImageModel) {
+    fun putEntry(key: String, value: DataModel) {
         if (hashMap.containsKey(key)) {
             //Key already exist, just update the value and move it to top
             val entry = hashMap[key]

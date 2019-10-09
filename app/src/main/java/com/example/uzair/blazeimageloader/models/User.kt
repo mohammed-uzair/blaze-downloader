@@ -5,6 +5,9 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+/**
+ * Model class for user
+ */
 @Entity
 data class User(
     @PrimaryKey

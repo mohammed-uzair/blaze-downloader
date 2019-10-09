@@ -7,11 +7,13 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion buildVersions.compileSdkVersion
+    buildToolsVersion buildVersions.buildToolsVersion
+
     defaultConfig {
-        applicationId "com.example.uzair.blazeimageloader"
-        minSdkVersion 23
-        targetSdkVersion 28
+        applicationId appFields.packageName
+        minSdkVersion buildVersions.minSdkVersion
+        targetSdkVersion buildVersions.targetSdkVersion
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -22,46 +24,51 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    /*Use java version 1.8 in this module*/
+    compileOptions {
+        sourceCompatibility buildVersions.javaVersion
+        targetCompatibility buildVersions.javaVersion
+    }
 }
 
 dependencies {
     //Android
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation deps.appCompat
+    implementation deps.cardView
+    implementation deps.recyclerView
+    implementation deps.constraintLayout
+    implementation deps.materialDesign
+    implementation deps.gson
+    implementation deps.lifeCycleExt
 
     //Pagination
-    implementation 'androidx.paging:paging-runtime-ktx:2.1.0'
+    implementation deps.pagination
 
     //Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.1.0'
+    implementation deps.kotlin.runtime
+    implementation deps.kotlin.androidCore
 
     //Kotlin CoRoutines
-    def kotlin_coroutines_version = '1.3.1'
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines_version"
+    implementation deps.coroutines.runtime
+    implementation deps.coroutines.core
 
     //Library implementation
     implementation project(path: ':blaze-downloader')
 
-    //Room InMemory database
-    def room_version = "2.2.0-rc01"
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
+    /*Room - Library used to map objects with SQLite database for db operations
+      url {@link "https://developer.android.com/topic/libraries/architecture/room"}*/
+    implementation deps.room.runtime
+    kapt deps.room.androidAnnotationProcessor
 
     // optional - Kotlin Extensions and Coroutines support for Room
-    implementation "androidx.room:room-ktx:$room_version"
+    implementation deps.room.kotlinCoroutinesSupport
 
     // Testing dependencies
-    androidTestImplementation "androidx.test.espresso:espresso-contrib:3.2.0"
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0"
-    androidTestImplementation "androidx.test.espresso:espresso-intents:3.2.0"
-    androidTestImplementation "androidx.test.ext:junit:1.1.1"
-    testImplementation "junit:junit:4.12"
-    testImplementation "androidx.room:room-testing:$room_version"
+    androidTestImplementation deps.testing.espresso
+    androidTestImplementation deps.testing.espressoCore
+    androidTestImplementation deps.testing.espressoIntents
+    androidTestImplementation deps.testing.jUnitExt
+    testImplementation deps.testing.jUnit
+    testImplementation deps.testing.room
 }

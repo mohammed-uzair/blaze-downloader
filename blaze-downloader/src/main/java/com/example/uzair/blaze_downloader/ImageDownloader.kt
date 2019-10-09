@@ -7,11 +7,17 @@ import java.io.IOException
 import java.net.MalformedURLException
 import java.net.URL
 
+/**
+ * This class will fetch the image from the background
+ */
 class ImageDownloader(private val url: String) {
     companion object {
         private val TAG = this::class.java.simpleName
     }
 
+    /**
+     * Get the image from the CDN
+     */
     fun getImageFromCdn(): Bitmap? {
         var bitmap: Bitmap? = null
 

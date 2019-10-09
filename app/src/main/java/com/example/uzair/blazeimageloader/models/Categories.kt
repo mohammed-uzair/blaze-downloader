@@ -5,6 +5,9 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+/**
+ * Model class for categories
+ */
 @Entity
 data class Categories(
     @PrimaryKey

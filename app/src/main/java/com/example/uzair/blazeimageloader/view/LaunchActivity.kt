@@ -11,6 +11,9 @@ import com.example.uzair.blazeimageloader.R
 
 const val SPLASH_SCREEN_DELAY_MILLISECONDS = 700
 
+/**
+ * This is the launch activity, performs a simple circular reveal
+ */
 class LaunchActivity : Activity() {
     private var constraintLayout: ConstraintLayout? = null
 

@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
  * but at later point we can also add a data base or a local cache without disturbing any other
  * modules.
  */
-class WallPostsRepository(val context: Application) : IWallPostsRepository {
+class WallPostsRepository(private val context: Application) : IWallPostsRepository {
     override fun getAllWallPosts() {
         /*Write a logic here to find where to get the data from,
         for now in this case its only webservice.*/
@@ -41,8 +41,6 @@ class WallPostsRepository(val context: Application) : IWallPostsRepository {
 
     /**
      * This method will make a web service request and get all the wall posts from the server
-     *
-     * @param mutableLiveData A live list reference to update the UI
      */
     private fun getWallPostsFromWebService() {
         val imageFeedUrl = "https://pastebin.com/raw/wgkJgazE"
@@ -55,7 +53,7 @@ class WallPostsRepository(val context: Application) : IWallPostsRepository {
 
             //Parse the received Json response
             data?.let {
-                val jsonData = JsonData(data, context)
+                val jsonData = JsonData(data)
 
                 val dao = WallPostDb.get(context).wallPostDao()
 

@@ -4,6 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+/**
+ * Model class for links
+ */
 @Entity
 data class Links(
     @PrimaryKey(autoGenerate = true)

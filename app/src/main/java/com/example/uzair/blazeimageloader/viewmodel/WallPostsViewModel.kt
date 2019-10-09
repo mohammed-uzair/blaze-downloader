@@ -49,6 +49,9 @@ class WallPostsViewModel(val app: Application) : AndroidViewModel(app) {
         )
     )
 
+    /**
+     * Fetch all the data from the web service
+     */
     fun fetchAllData() {
         WallPostsRepository(app).getAllWallPosts()
     }
