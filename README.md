@@ -9,13 +9,13 @@ For now I have used a static URL -> https://pastebin.com/raw/wgkJgazE to fetch t
 
 ### Implemented by Clean Architecture
 The following diagram shows the structure of this project with 3 layers:
-- Presentation
-- Domain
-- Data
+- View
+- ViewModel
+- Model
 
 <br>
 <p align="center">
-  <img src="https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwi68_mdo4rlAhWIK1AKHdrjC9cQjRx6BAgBEAQ&url=https%3A%2F%2Fmedium.com%2Fmindorks%2Fandroid-recyclerview-pagination-with-paging-library-using-mvvm-rxjava-dagger-2-and-livedata-b0489ecbbfc0&psig=AOvVaw0GMQWtpHxDB9L4Ar1UD_ci&ust=1570542047028041"/>
+  <img src="/documents/raw/mvvm.png"/>
 </p>
 <br>
 
@@ -37,8 +37,6 @@ At a glance:
 - Show the downloaded images using LRU caching.
 - Added pagination using InMemory database for better user experience.
 
-
-![Example1](documents/raw/mvvm.png)
-
-
 ![Example2](documents/raw/pagination.gif)
+
+I will be happy to add more updates frequently :)
