@@ -1,4 +1,4 @@
-# blaze-downloader
+# Blaze Downloader
 An image and Json downloading library with InMemory LRU cache.
 
 I will support more data types in future
